@@ -39,7 +39,7 @@ typedef struct List {
 	}	
 
 	void insert(int index, int elemen) {
-		if (index >= 0 && index < size-1) {
+		if (index >= 0 && index < size) {
 			if (size == capacity) {
 				capacity += INITIAL_SIZE;
 				data = (int *)realloc(data, capacity * sizeof(int));
@@ -71,7 +71,7 @@ typedef struct List {
 	}
 	
 	void removeat(int index) {
-		if (index >= 0 && index < size-1) {
+		if (index >= 0 && index < size) {
 			for ( int i = index ; i < size-1 ; i++ ) 
 				data[i] = data[i+1];
 			size--;	
