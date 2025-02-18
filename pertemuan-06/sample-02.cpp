@@ -1,56 +1,70 @@
 /*
-	*** implementasi stack dengan array
+	*** implementasi stack dengan linkedlist
 */
 
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct node {
+	int data;
+	node *next;
+} Node;
+
 typedef struct stack {
 	
-	int *data;
-	int  capacity;
+	Node *head;
 	int  size; 
 	
-	stack(int max) { // constructor
-		capacity = max;
+	stack() { // constructor
+		head = NULL;
 		size = 0;
-		data = (int*)malloc(sizeof(int)*capacity);
 	}
 	
 	bool is_empty() { 
 		return size == 0;
-	}
-	
-	bool is_full() {
-		return size == capacity;
+//		return head == NULL;
 	}
 	
 	void push(int value) {
-		if ( !is_full() ) {
-			data[size++] = value;
-		}
+		Node *newNode = (Node*)malloc(sizeof(Node));
+		newNode->data = value;
+		newNode->next = NULL;
+		if ( head == NULL ) 
+			head = newNode;
 		else {
-			printf("push: stack is full ...\n");
+			newNode->next = head;
+			head = newNode;			
 		}
+		size++;
 	}
 	
 	int top() {
 		if ( !is_empty() ) 
-			return data[size-1];
+			return head->data;
 		return -1;
 	}
 	
 	int pop() {
-		if ( !is_empty() ) 
-			return data[--size];
-		return -1;
+		int x = -1;
+		if ( !is_empty() ) {
+			Node *p = head;
+			head = p->next;
+			p->next = NULL;
+			x = p->data;
+			free(p);
+			size--;
+		}
+		return x;
 	}
 	
 	void display() {
 		printf("stack items [top to bottom] [size: %d] : ", size);
 		if ( !is_empty() ) {
-			for ( int i = size-1; i >= 0; i--) 
-				printf("%d, ", data[i]);
+			Node *p = head;
+			while ( p != NULL ) {
+				printf("%d, ", p->data);
+				p = p->next;
+			}
 			printf("\n");
 		}
 		else 
@@ -58,15 +72,21 @@ typedef struct stack {
 	}
 	
 	~stack() { // destructor
-		free(data);
+		while ( head != NULL) {
+			Node *p = head;
+			head = p->next; 
+			p->next = NULL;
+			free(p);
+		}
 	}
 	
 } Stack;
 
 
+
 int main() {
 
-	Stack mystack(10);
+	Stack mystack;
 	
 	mystack.display();
 	
