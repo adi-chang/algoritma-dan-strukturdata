@@ -45,7 +45,7 @@ typedef struct linkedlist {
 	}
 		
 	~linkedlist() {
-		tail->next = NULL;
+		if (tail != NULL) tail->next = NULL;
 		while (head != NULL) {
 			Node *p = head;
 			head = p->next;
